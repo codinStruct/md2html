@@ -2,7 +2,7 @@ import argparse
 import xml.etree.ElementTree as ET
 import os
 # import markdown
-import gh_md_to_html.core_converter
+import mistune;
 from pathlib import Path
 
 
@@ -57,7 +57,7 @@ def main(input_dir, output_dir):
                     # Faz a conversão
                     # TODO: Achar uma maneira melhor de converter para html
                     # html = markdown.markdown(text, extensions=['extra','abbr','attr_list','def_list','fenced_code','footnotes','md_in_html','tables','admonition','codehilite','legacy_attrs','legacy_em','meta','nl2br','sane_lists','smarty','toc','wikilinks'])
-                    html = gh_md_to_html.core_converter.markdown(text)
+                    html = mistune.html(text)
 
 
                     # Salva o arquivo na pasta output_dir

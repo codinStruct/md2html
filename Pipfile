@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-gh-md-to-html = "*"
-pygments = "*"
 mistune = ">=2.0.0rc1"
 
 [dev-packages]
