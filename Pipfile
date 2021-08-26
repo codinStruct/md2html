@@ -10,3 +10,6 @@ mistune = ">=2.0.0rc1"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
