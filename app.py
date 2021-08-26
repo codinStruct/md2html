@@ -1,5 +1,4 @@
 import argparse
-import glob
 import xml.etree.ElementTree as ET
 import os
 # import markdown
@@ -23,7 +22,7 @@ from pathlib import Path
 # Ou seja: input_dir/a/b/file.md -> output_dir/a/b/file.html
 def main(input_dir, output_dir):
     # Acha todos os arquivos estrutura.xml dentro de uma pasta em input_dir
-    xml_list = glob.glob(f"{input_dir}/*/estrutura.xml")
+    xml_list = Path(f"{input_dir}").glob("*/estrutura.xml")
 
 
 
@@ -38,21 +37,21 @@ def main(input_dir, output_dir):
 
                     # Caminho relativo a partir de input_dir das páginas
                     # dir = pasta, path = arquivo
-                    md_relative_dir = f"{os.path.basename(os.path.dirname(xml_path))}\\{categoria.attrib['caminho']}\\{assunto.attrib['caminho']}"
-                    md_relative_path = f"{md_relative_dir}\\{page.attrib['caminho']}"
+                    md_relative_dir = str(Path(f"{os.path.basename(os.path.dirname(xml_path))}/{categoria.attrib['caminho']}/{assunto.attrib['caminho']}"))
+                    md_relative_path = str(Path(f"{md_relative_dir}/{page.attrib['caminho']}"))
 
                     print(md_relative_path)
 
 
 
                     # Cria a pasta se ela não existe
-                    if not os.path.exists(f"{output_dir}\\{md_relative_dir}"):
-                        os.makedirs(f"{output_dir}\\{md_relative_dir}")
+                    if not os.path.exists(str(Path(f"{output_dir}/{md_relative_dir}"))):
+                        os.makedirs(str(Path(f"{output_dir}/{md_relative_dir}")))
 
                     # # Lê o arquivo markdown
-                    with open(f"{input_dir}\\{md_relative_path}", 'r') as md_file:
+                    with open(str(Path(f"{input_dir}/{md_relative_path}")), 'r') as md_file:
                         text = md_file.read()
-                    
+
 
 
                     # Faz a conversão
@@ -62,7 +61,7 @@ def main(input_dir, output_dir):
 
 
                     # Salva o arquivo na pasta output_dir
-                    with open(f"{output_dir}\\{md_relative_path.replace('.md', '.html')}", 'w') as html_file:
+                    with open(str(Path(f"{output_dir}/{md_relative_path.replace('.md', '.html')}")), 'w') as html_file:
                         html_file.write(html)
 
 
