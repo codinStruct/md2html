@@ -1,0 +1,1 @@
+python -m pipenv run python app.py ..\Projeto-Content ..\Output
