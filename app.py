@@ -1,8 +1,6 @@
 import argparse
-import xml.etree.ElementTree as ET
 import os
-# import markdown
-import mistune;
+import mistune
 from pathlib import Path
 
 
@@ -13,56 +11,45 @@ from pathlib import Path
 
 
 
-# Lê todos os arquivos */estrutura.xml dentro de input_dir
-# e acha o caminho de todas as páginas cujo xml segue assim:
-# categoria>assunto>page.md (usando os atributos 'caminho')
+# Lê todos os arquivos markdown dentro de input_dir
 # Depois disso converte os arquivos markdown para html e salva
 # a conversão dentro da pasta output_dir com a mesma organização
 # relativa de pastas encontrada em input_dir
 # Ou seja: input_dir/a/b/file.md -> output_dir/a/b/file.html
 def main(input_dir, output_dir):
-    # Acha todos os arquivos estrutura.xml dentro de uma pasta em input_dir
-    xml_list = Path(f"{input_dir}").glob("*/estrutura.xml")
+    # Acha todos os arquivos markdown em input_dir recusivamente
+    md_list = Path(f"{input_dir}").glob("**/*.md")
+
+    for md_path in md_list:
+      # Caminho relativo a partir de input_dir das páginas
+      # dir = pasta, path = arquivo
+      md_relative_dir = str(Path(f"{os.path.dirname(md_path)}")).replace(input_dir + "/", "")
+      md_relative_path = str(Path(md_relative_dir + "/" + os.path.basename(md_path))).replace(input_dir + "/", "")
+
+      print("Arquivo convertido:", md_relative_path)
 
 
 
-    # Loop por todos os arquivos
-    for xml_path in xml_list:
-        root = ET.parse(xml_path).getroot()
-
-        # Encontrando todos as páginas
-        for categoria in root.findall("categoria"):
-            for assunto in categoria.findall("assunto"):
-                for page in assunto.findall("page"):
-
-                    # Caminho relativo a partir de input_dir das páginas
-                    # dir = pasta, path = arquivo
-                    md_relative_dir = str(Path(f"{os.path.basename(os.path.dirname(xml_path))}/{categoria.attrib['caminho']}/{assunto.attrib['caminho']}"))
-                    md_relative_path = str(Path(f"{md_relative_dir}/{page.attrib['caminho']}"))
-
-                    print(md_relative_path)
+      # Cria a pasta se ela não existe
+      if not os.path.exists(str(Path(f"{output_dir}/{md_relative_dir}"))):
+          os.makedirs(str(Path(f"{output_dir}/{md_relative_dir}")))
 
 
 
-                    # Cria a pasta se ela não existe
-                    if not os.path.exists(str(Path(f"{output_dir}/{md_relative_dir}"))):
-                        os.makedirs(str(Path(f"{output_dir}/{md_relative_dir}")))
-
-                    # # Lê o arquivo markdown
-                    with open(str(Path(f"{input_dir}/{md_relative_path}")), 'r') as md_file:
-                        text = md_file.read()
+      # Lê o arquivo markdown
+      with open(str(Path(f"{input_dir}/{md_relative_path}")), 'r') as md_file:
+          text = md_file.read()
 
 
 
-                    # Faz a conversão
-                    # TODO: Achar uma maneira melhor de converter para html
-                    # html = markdown.markdown(text, extensions=['extra','abbr','attr_list','def_list','fenced_code','footnotes','md_in_html','tables','admonition','codehilite','legacy_attrs','legacy_em','meta','nl2br','sane_lists','smarty','toc','wikilinks'])
-                    html = mistune.html(text)
+      # Faz a conversão
+      html = mistune.html(text)
 
 
-                    # Salva o arquivo na pasta output_dir
-                    with open(str(Path(f"{output_dir}/{md_relative_path.replace('.md', '.html')}")), 'w') as html_file:
-                        html_file.write(html)
+
+      # Salva o arquivo na pasta output_dir
+      with open(str(Path(f"{output_dir}/{md_relative_path.replace('.md', '.html')}")), 'w') as html_file:
+          html_file.write(html)
 
 
 
