@@ -42,8 +42,7 @@ def main(input_dir, output_dir):
 
 if __name__ == "__main__":
     # Colects the arguments input_dir e output_dir
-    PARSER = argparse.ArgumentParser(
-        description='Converter Markdown para HTML')
+    PARSER = argparse.ArgumentParser(description='Converter Markdown para HTML')
     PARSER.add_argument("input_dir", help="Caminho para ser convertido")
     PARSER.add_argument("output_dir", help="Caminho para salvar")
     ARGS = PARSER.parse_args()
