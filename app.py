@@ -11,7 +11,7 @@ import mistune
 def main(input_dir, output_dir):
     """For each markdown file in input_dir convert it to html in output_dir and print the file name if the markdown file is more recent than the html"""
     for markdown_file in Path(input_dir).glob('**/*.md'):
-        html_file = Path(output_dir, markdown_file.relative_to(input_dir))
+        html_file = Path(output_dir, markdown_file.relative_to(input_dir)).with_suffix('.html')
         html_file.parent.mkdir(parents=True, exist_ok=True)
         if not html_file.exists() or markdown_file.stat().st_mtime > html_file.stat().st_mtime:
             print("Converted: " + markdown_file.name)
