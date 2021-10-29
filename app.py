@@ -17,7 +17,7 @@ def main(input_dir, output_dir):
             print("Converted: " + markdown_file.name)
             with open(markdown_file, 'r', encoding='utf-8') as file:
                 content = file.read()
-            html = mistune.markdown(content)
+            html = mistune.html(content)
             with open(html_file, 'w', encoding='utf-8') as file:
                 file.write(html)
 
